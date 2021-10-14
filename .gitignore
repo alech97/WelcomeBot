@@ -3,3 +3,4 @@
 *.ipynb
 *.txt
 speech_models/
+*.json
