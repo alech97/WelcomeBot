@@ -41,7 +41,7 @@ class WakeThread(Thread):
 
     def __init__(
             self,
-            callback=lambda keyword: print('[%s] Detected %s' % (str(datetime.now()), keyword)),
+            callback=lambda keyword, audio: print('[%s] Detected %s' % (str(datetime.now()), keyword)),
             library_path=pvporcupine.LIBRARY_PATH,
             model_path=pvporcupine.MODEL_PATH,
             keyword_paths=[pvporcupine.KEYWORD_PATHS['jarvis']],
@@ -72,8 +72,7 @@ class WakeThread(Thread):
         self._input_device_index = input_device_index
 
         self._output_path = output_path
-        if self._output_path is not None:
-            self._recorded_frames = []
+        self._recorded_frames = []
 
     def run(self):
         """

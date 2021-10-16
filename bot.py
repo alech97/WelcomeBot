@@ -1,7 +1,6 @@
 from audio import WakeThread, ListenInputThread, record_seconds, write_audio
 from visual import capture_face, GuestManager
 
-import azure.cognitiveservices.speech as speechsdk
 import numpy as np
 
 class Responses:
@@ -162,32 +161,3 @@ class WelcomeBot:
             print("Speech Recognition canceled: {}".format(cancellation_details.reason))
             if cancellation_details.reason == speechsdk.CancellationReason.Error:
                 print("Error details: {}".format(cancellation_details.error_details))
-    
-    def azure_speech_synthesis(self, text):
-        """Upload text to Azure and output response to speaker"""
-        #Speech synthesizer using the default speaker as audio output.
-        speech_synthesizer = speechsdk.SpeechSynthesizer(
-            speech_config=self._azure_speech_config, 
-            audio_config=speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
-        )
-
-        # Receives a text from console input and synthesizes it to speaker.
-        result = speech_synthesizer.speak_text_async(text).get()
-        # Check result
-        if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-            print(f"Speech synthesized to speaker for text: {text}")
-            result_stream = speechsdk.AudioDataStream(result)
-
-            #Write to file here and save sentence which was sent to file
-            #TODO
-            result_stream.save_to_wav_file('data/logs/latest_tts.wav')
-            
-            #Add to list of sentences spoken
-            #TODO
-        elif result.reason == speechsdk.ResultReason.Canceled:
-            cancellation_details = result.cancellation_details
-            print("Speech synthesis canceled: {}".format(cancellation_details.reason))
-            if cancellation_details.reason == speechsdk.CancellationReason.Error:
-                print("Error details: {}".format(cancellation_details.error_details))
-
-        
